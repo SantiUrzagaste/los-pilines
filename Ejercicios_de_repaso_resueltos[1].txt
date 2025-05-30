@@ -1,0 +1,164 @@
+Resolución de los ejercicios de repaso 
+ 
+2. Los números complejos constan de dos partes, una parte real y la otra imaginaria de la siguiente forma: C = (2 + 4i). Realice la implementación de TDA Complejo utilizando registro. Ademas implemente las operaciones: 
+a. Crear Complejo: dados dos números enteros, devuelve un Complejo. 
+b. Igualdad de complejos: Dado dos Complejos, retorna true si son iguales y falso si no lo son. 
+c. Suma de Complejos: Dados dos Complejos, devuelve la suma de los dos Complejos. 
+d. Mostrar complejos: Muestra la parte real y la parte imaginaria de un Complejo. 
+ 
+#include <iostream>  using namespace std;  struct Complejo{     int real;     int imaginario; }; 
+ Complejo CrearComplejo (int r, int i); bool SonIguales (Complejo c1, Complejo c2); Complejo SumarComplejos (Complejo c1, Complejo c2); void MostrarComplejo (Complejo c);  int main(){     Complejo c1 = CrearComplejo(2,4); 
+    Complejo c2 = CrearComplejo(3,5);     
+    cout << "Complejo 1: ";     MostrarComplejo(c1);     
+    cout << "Complejo 2: ";     MostrarComplejo(c2); 
+        Complejo suma = SumarComplejos(c1,c2);     cout << "Suma: ";     MostrarComplejo(suma);         if(SonIguales(c1,c2))         cout<<"Los complejos son iguales." << endl;     else         cout<<"Los complejos no son iguales." << endl;         return 0; 
+} 
+ 
+Complejo CrearComplejo (int r, int i){     Complejo c; 
+    c.real=r; 
+    c.imaginario=i;     return c; }  bool SonIguales (Complejo c1, Complejo c2) {     return (c1.real == c2.real && c1.imaginario == c2.imaginario); } 
+ 
+Complejo SumarComplejos (Complejo c1, Complejo c2){     Complejo resultado;     resultado.real = c1.real + c2.real;     resultado.imaginario = c1.imaginario + c2.imaginario;     return resultado; }  void MostrarComplejo(Complejo c){     cout<<c.real;         if (c.imaginario >=0)             cout<<" + "<<c.imaginario << " i " << endl;         else             cout<< " - "<<c.imaginario << " i " <<endl; } 
+3. Implemente el TDA Pila de caracteres y las operaciones iniciar_pila, quitar_pila, pila_vacia.  
+a. Realice la definición de datos de la estructura utilizando registros, arreglos o nodos (es a elección). 
+b. Utilice una excepción para cuando se desee quitar un elemento de una pila vacía. 
+c. Utilice en la función principal un bloque try-catch para capturar la excepción del punto b. 
+ 
+Utilizando registros const int MAX = 100; 
+ typedef char Contenedor[MAX] 
+ 
+typedef struct Pila{  	Contenedor datos;  	int cima; 
+};  void initStack(Pila &pila){  	pila.cima = -1; 
+} bool isEmptyStack(Pila pila){  	return pila.cima == -1; 
+}  
+char popStack(Pila &pila){  	char quitado;  	if(isEmptyStack(pila))  	 	throw “Error, la pila está vacía”  	else{ 
+ 	 	quitado = pila.datos[pila.cima];  	 	pila.cima -= 1; 
+} return quitado; 
+} 
+ 
+Utilizando arreglos 
+ 
+const int MAX = 100; 
+ typedef char Pila[MAX] //posición 0 se guarda la cima 
+ 
+//Se inicializa en 0 porque es una posición invalida para datos void initStack(Pila &pila){  	pila[0] = 0;  
+} 
+  bool isEmptyStack(Pila pila){  	return pila[0] == 0; 
+}  char popStack(Pila &pila){  	char quitado;  	if(isEmptyStack(pila))  	 	throw “Error, la pila está vacía”  	else{ 
+ 	 	quitado = pila[pila[0]];  	 	pila[0] -= 1; 
+} return quitado; 
+}  int main(){ 
+ 	Pila p;  	initStack(p);  	char valor;  	try{ 
+	 	valor = popStack(p); 
+} catch(const char* e){  	cout << e << endl; 
+} 
+} 
+ 
+Utilizando Nodos 
+ typedef struct Nodo* pnodo; typedef struct Nodo{  	char dato;  	pnodo siguiente; 
+};  void initStack(pnodo &pila){  	pila = nullptr; 
+}  
+bool isEmptyStack(pnodo pila){  	return pila == nullptr; 
+}  
+char popStack(Pila &pila){  	if(isEmptyStack(pila))  	 	throw “Error, la pila está vacía”  	pnodo aux = pila;  	pila = pila->siguiente; 
+ 
+return aux->dato; 
+}  int main(){ 
+ 	pnodo p;  	initStack(p);  	char valor;  	try{ 
+	 	valor = popStack(p); 
+} catch(const char* e){  	cout << e << endl; 
+} 
+} 
+ 
+4. Utilizando TDA Pila y sus operaciones básicas, implemente una función/procedimiento que permita ordenar la pila utilizando solo otra pila auxiliar y sin usar arreglos, de forma que el primero en salir siempre sea el valor más pequeño. 
+No debe escribir la implementación de las operaciones básicas de pila, solo debe utilizarlas. 
+ 
+void ordenar(PILA &p, PILA &aux) {  	while (isEmptyStack(p)==false) {  	 	int auxiliar = PopStack(p); 
+ 	 	while (isEmptyStack(aux)==false && topStack(aux) > auxiliar) {  	 	 	PushStack(p, PopStack(aux)); 
+ 	 	} 
+ 	 	PushStack(aux, auxiliar); 
+ 	} 
+ 	while (isEmptyStack(aux)==false) { 
+ 	 	PushStack(p, PopStack(aux)); 
+ 	} 
+} 
+ 
+5.Utilizando TDA Pila y sus operaciones básicas, implemente una función/procedimiento que permita eliminar el elemento en el medio de los datos sin usar estructuras externas distintas a pilas. Si la pila tiene un número par de elementos devuelve el primer valor de la segunda mitad. Por ejemplo: 
+Ejemplo 1: Pila con cantidad de datos par. 
+Pila: 2 5 6 7 
+Elemento central: 6 
+Ejemplo 2: Pila con cantidad de datos impar. 
+Pila: 1 3 4 7 9 
+Elemento central 4 
+No debe implementar las operaciones de pila, solo utilizarlas. 
+int obtenerCantidad(Pila p){  	int cantidad = 0;  	Pila aux;  	initStack(aux);  	while(!isEmptyStack(p)){  	cantidad++;  	int valor = popStack(p);  	pushStack(aux, valor); 
+} while(!isEmptyStack(aux)){  	int valor = popStack(aux);  	pushStack(p, valor); 
+} return cantidad; 
+} 
+int quitarMedio(Pila &p) { 
+ 	Pila aux;  	initStack(p);  	int cantidad = obtenerCantidad(p);  	int limite;  	if(cantidad % 2 == 0) limite = cantidad / 2 + 1; 
+else limite = cantidad / 2; 
+int posiciones = 0; while(posiciones <= limite){  	int valor = popStack(p);  	pushStack(aux, valor);  	posiciones++; 
+} int quitado = popStack(aux); while(!isEmptyStack(aux)){  	int valor = popStack(aux);  	pushStack(p, valor); 
+} 
+return quitado; 
+} 
+ 
+6. Utilizando el TDA pila y sus operaciones básicas, desarrolle una función que permita detectar si una cadena ingresada por el usuario es un palíndromo o no. Ejemplo de salida: Cadena ingresada: 
+NEUQUEN. Respuesta: La cadena ingresada es un PALÍNDROMO!! 
+Solo invoque las operaciones de pila. No es necesario que las implemente. 
+ 
+bool esPalindromo(string palabra){     Pila pila;     initStack(pila); 
+    for(int i = 0; i < palabra.size(); i++){         pushStack(pila, palabra[i]); 
+    }     int j = 0;     while(!isEmptyStack(pila)){         if(palabra[j] != topStack(pila)){             return false; 
+        }         else{             popStack(pila);             j++; 
+        }     }     return true; 
+} 
+ 
+8. Dada un TDA Cola circular que prioriza velocidad de proceso, implemente una 
+función/procedimiento que permita contar la cantidad de elementos en una cola. Para resolver el problema utilice al menos 2 operaciones básicas de TDA Cola. 
+Solo invoque las operaciones de TDA Cola. No es necesario que las implemente. 
+ int contarElementos(Cola &c) { int contador = 0; float elemento; Cola aux; initQueue(aux); while (!isEmptyQueue(c)) { elemento = popQueue(c); pushQueue(aux, elemento); contador++; 
+} while (!isEmptyQueue(aux)) { elemento = popQueue(aux); pushQueue(c, elemento); 
+} return contador; 
+} 
+ 
+9.Realice una función/procedimiento que permita copiar los elementos de una cola a otra sin alterar la cola original. Se considera que la cola es de números enteros y que la cola prioriza velocidad de proceso. 
+void copiarCola(Cola original, Cola &copia) { 
+Cola aux; initQueue(aux); while(!isEmptyQueue(original)){  	int valor = popQueue(original);  	pushQueue(copia, valor);  	pushQueue(aux, valor); 
+} 
+while(!isEmptyQueue(aux)){  	int valor = popQueue(aux);  	pushQueue(original, valor); 
+} 
+} 
+10. Realice una función/procedimiento que combine TDA Pila y TDA cola, ambos de tipo entero, para invertir el orden de los datos almacenados en una cola. Utilice únicamente esas estructuras para resolver el problema. No debe implementar las operaciones básicas de las estructuras, solo invocar las funciones necesarias. 
+ 
+void reverseQueue(Cola &cola) { Pila pilaAuxiliar; initStack(pilaAuxiliar); 
+ while (!isEmptyQueue(cola)) { int numero = popQueue(cola); pushStack(pilaAuxiliar, numero); 
+} 
+ while (!isEmptyStack(pilaAuxiliar)) { int numero = popStack(pilaAuxiliar); pushStack(cola, numero); 
+} 
+} 
+ 
+11.Un TDA Bicola, es una estructura de cola que permite el ingreso y la salida de datos sin restricción (Frente o Final) a voluntad del usuario. Teniendo en cuenta esto, implemente: 
+a. La operación Agregar o PushQueue que permita al usuario elegir por que posición de la fila agregar un elemento (frente o final) 
+b. La operación Quitar o PopQueue que permita al usuario elegir por que posición de la fila quitar un elemento (frente o final) 
+Además, debe implementar aquellas funciones/procedimientos que se requieran (por ejemplo, la función next). 
+int siguiente(int indice){  	indice = indice + 1;  	if(indice == MAX){  	indice = 0; 
+} return indice; 
+} 
+int anterior(int indice){  	indice = indice - 1;  	if(indice == 0){  	indice = MAX - 1; 
+} return indice; 
+}  void pushQueue(Bicola &bicola, int valor, int op) {  	if(isFullQueue(bicola))  	 	cout << “La cola está llena”<< endl; 
+ 	else{  	 	if(op == 1){ 
+ 	bicola.fin = next(bicola.fin);  	bicola.datos[bicola.fin] = valor; 
+} else{  	bicola.datos[bicola.frente] = valor;  	bicola.frente = anterior(bicola.frente); 
+} 
+} 
+}  int popQueue(Bicola &bicola, int op){  	int extraido;  	if(isEmptyQueue(bicola)){  	cout << “La cola está vacía”<<endl;  	extraido = -999; 
+} else{ 
+	 	if(op == 1){ 
+ 	bicola.frente = siguiente(bicola.frente);  	extraido = bicola.datos[bicola.frente]; 
+} else{  	extraido = bicola.datos[bicola.fin];  	bicola.fin = anterior(bicola.fin); 
+       } } return extraido; 
+} 
+ 
